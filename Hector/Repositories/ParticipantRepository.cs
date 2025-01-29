@@ -1,33 +1,30 @@
 ﻿using Hector.Data;
-using Hector.Models;
-using System.Collections.Generic;
-using System.Linq;
+using Hector.Models.DTOs;
 
 namespace Hector.Repositories
 {
     public class ParticipantRepository
     {
-        private readonly ParticipantDbContext _participantDbContext;
+        private readonly HectorDbContext _participantDbContext;
 
-        public ParticipantRepository(ParticipantDbContext participantDbContext)
+        public ParticipantRepository(HectorDbContext participantDbContext)
         {
             _participantDbContext = participantDbContext;
         }
 
 
-        public List<Participant> GetAllParticipants() => _participantDbContext.Participants.ToList();
+        public List<ParticipantDTO> GetAllParticipants() => _participantDbContext.Participants.ToList();
 
-        public Participant GetParticipant(int id) => _participantDbContext.Participants.FirstOrDefault(i => i.Id == id);
+        public ParticipantDTO GetParticipant(int id) => _participantDbContext.Participants.FirstOrDefault(i => i.Id == id);
 
-        public Participant CreateParticipant(Participant participant)
+        public ParticipantDTO CreateParticipant(ParticipantDTO participant)
         {
-            //participant.Id = _participantDbContext.Participants.OrderByDescending(x => x.Id).FirstOrDefault().Id + 1;
             _participantDbContext.Participants.Add(participant);
             _participantDbContext.SaveChanges();
             return participant;
         }
 
-        public Participant UpdateParticipant(int id, Participant participant)
+        public ParticipantDTO UpdateParticipant(int id, ParticipantDTO participant)
          {
             var existingParticipant = _participantDbContext.Participants.FirstOrDefault(i => i.Id == id);
             if (existingParticipant != null)

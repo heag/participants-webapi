@@ -1,5 +1,5 @@
-﻿using Hector.Models;
-using Hector.Repositories;
+﻿using Hector.Repositories;
+using Hector.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -10,18 +10,18 @@ namespace Hector.Controllers
     [ApiController]
     public class ParticipantsController : ControllerBase
     {
-        private readonly ParticipantRepository _ParticipantRepository;
+        private readonly ParticipantRepository _participantRepository;
 
-        public ParticipantsController(ParticipantRepository ParticipantRepository)
+        public ParticipantsController(ParticipantRepository participantRepository)
         {
-            _ParticipantRepository = ParticipantRepository;
+            _participantRepository = participantRepository;
         }
 
         // GET: api/<ParticipantsController>
         [HttpGet]
         public IActionResult GetParticipants()
         {
-            return Ok(_ParticipantRepository.GetAllParticipants());
+            return Ok(_participantRepository.GetAllParticipants());
 
         }
 
@@ -29,7 +29,7 @@ namespace Hector.Controllers
         [HttpGet("{id}")]
         public IActionResult GetParticipant(int id)
         {
-            var participant = _ParticipantRepository.GetParticipant(id);
+            var participant = _participantRepository.GetParticipant(id);
             if(participant == null) {
                 return NotFound();
             }
@@ -39,24 +39,24 @@ namespace Hector.Controllers
 
         // POST api/<ParticipantsController>
         [HttpPost]
-        public IActionResult Post([FromBody] Participant participant)
+        public IActionResult Post([FromBody] ParticipantDTO participant)
         {
             if(participant == null)
                 return BadRequest();
 
-            var createdParticipant = _ParticipantRepository.CreateParticipant(participant);
+            var createdParticipant = _participantRepository.CreateParticipant(participant);
             Console.WriteLine(nameof(GetParticipant));
             return CreatedAtAction(nameof(GetParticipant), new { id = createdParticipant.Id }, createdParticipant);
         }
 
         // PUT: api/participants/5
         [HttpPut("{id}")]
-        public IActionResult UpdateParticipant(int id, [FromBody] Participant participant)
+        public IActionResult UpdateParticipant(int id, [FromBody] ParticipantDTO participant)
         {
             if (participant == null || participant.Id != id)
                 return BadRequest();
 
-            var updatedParticipant = _ParticipantRepository.UpdateParticipant(id, participant);
+            var updatedParticipant = _participantRepository.UpdateParticipant(id, participant);
             if (updatedParticipant == null)
                 return NotFound();
 
@@ -67,7 +67,7 @@ namespace Hector.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteParticipant(int id)
         {
-            var success = _ParticipantRepository.DeleteParticipant(id);
+            var success = _participantRepository.DeleteParticipant(id);
             if (!success)
                 return NotFound();
 
